@@ -3,15 +3,19 @@ package br.com.money.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import br.com.money.exception.PessoaInexistenteOuInativaException;
 import br.com.money.model.Categoria;
 import br.com.money.model.Lancamento;
 import br.com.money.model.Pessoa;
+import br.com.money.model.SimNao;
 import br.com.money.repository.CategoriaRepository;
 import br.com.money.repository.LancamentoRepository;
 import br.com.money.repository.PessoaRepository;
 import br.com.money.service.ILancamentoService;
 
+@Service
 public class LancamentoServiceImpl implements ILancamentoService {
 	
 	@Autowired
@@ -26,6 +30,9 @@ public class LancamentoServiceImpl implements ILancamentoService {
 	@Override
 	public Lancamento criar(Lancamento lancamento) {
 		Pessoa pessoa = pessoaRepository.findOne(lancamento.getPessoa().getCodigo());
+		if(pessoa == null || pessoa.getAtivo() == SimNao.N) {
+			throw new PessoaInexistenteOuInativaException("Pessoa inexistente ou inativa");
+		}		
 		Categoria categoria = categoriaRepository.findOne(lancamento.getCategoria().getCodigo());
 		lancamento.setPessoa(pessoa);
 		lancamento.setCategoria(categoria);

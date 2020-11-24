@@ -2,7 +2,6 @@ package br.com.money.exception;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,24 +55,24 @@ public class MoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
 			WebRequest request) {
+		return gerarExcecaoInterna(ex, request, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(PessoaInexistenteOuInativaException.class)
+	public ResponseEntity<Object> handlePessoalInexistenteOuInativa(PessoaInexistenteOuInativaException ex,
+			WebRequest request) {
+		return gerarExcecaoInterna(ex, request, HttpStatus.BAD_REQUEST);
+	}
 
-		System.getProperties();
-
+	private ResponseEntity<Object> gerarExcecaoInterna(Exception ex, WebRequest request, HttpStatus status) {
 		String msgDev = ExceptionUtils.getRootCauseMessage(ex);
 //		return super.handleExceptionInternal(ex,
 //				new ErroMessage(messageSource.getMessage("recurso.operacao.nao.permitida", null, getLocale()), msgDev),
 //				new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-		
 		return super.handleExceptionInternal(ex,
 				new ErroMessage("Error", msgDev),
-				new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+				new HttpHeaders(), status, request);
 	}
-
-	private Locale getLocale() {
-		return new Locale("pt", "BR");
-	}
-
-	//
 
 	private List<ErroMessage> createErroList(BindingResult binding) {
 		List<ErroMessage> erros = new ArrayList<ErroMessage>();

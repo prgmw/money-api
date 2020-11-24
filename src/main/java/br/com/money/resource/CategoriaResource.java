@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class CategoriaResource {
 	private CategoriaMapper mapper;
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
 	public ResponseEntity<List<Categoria>> listarTodos() {
 		return ResponseEntity.ok(repository.findAll());
 	}
@@ -52,6 +54,7 @@ public class CategoriaResource {
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Categoria> criar(@Valid @RequestBody CategoriaDTO categoriaDto, HttpServletResponse response) {
 		Categoria categoria = mapper.categoriaDTOToCategoria(categoriaDto);
 		Categoria salvo = repository.save(categoria);
@@ -64,6 +67,7 @@ public class CategoriaResource {
 	}
 	
 	@DeleteMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable(name = "codigo") Long id) {
 		repository.delete(id);
