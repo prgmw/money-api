@@ -1,5 +1,7 @@
 package br.com.money.token;
 
+import br.com.money.config.property.MoneyProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -20,6 +22,9 @@ import java.util.Objects;
 
 @ControllerAdvice
 public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2AccessToken> {
+
+    @Autowired
+    private MoneyProperty property;
 
 
     @Override
@@ -50,7 +55,7 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
     private void adicionarRefreshToken(String refreshToken, HttpServletRequest req, HttpServletResponse response) {
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false);
+        cookie.setSecure(property.getSeguranca().isEnableHttps());
         cookie.setPath(req.getContextPath() + "/oath/token");
         cookie.setMaxAge(99999);
         response.addCookie(cookie);

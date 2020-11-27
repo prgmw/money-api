@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,11 +38,13 @@ public class PessoaResource {
 	public PessoaMapper pessoaMapper;
 
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public ResponseEntity<List<Pessoa>> listarTodos() {
 		return ResponseEntity.ok(pessoaService.obterTodos());
 	}
 
 	@GetMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public ResponseEntity<?> buscarPorCodigo(@PathVariable(name = "codigo") Long id, HttpServletResponse response) {
 		Optional<Pessoa> pessoa = Optional.ofNullable(pessoaService.obterPorId(id));
 		if (!pessoa.isPresent()) {
@@ -51,6 +54,7 @@ public class PessoaResource {
 	}
 
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<?> criar(@Valid @RequestBody PessoaDTO pessoaDto, HttpServletResponse response) {
 		Pessoa salvo = pessoaService.criar(pessoaMapper.pessoaDTOToPessoa(pessoaDto));
 

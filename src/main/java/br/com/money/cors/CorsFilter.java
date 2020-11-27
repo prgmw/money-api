@@ -1,11 +1,13 @@
 //package br.com.money.cors;
 //
+//import br.com.money.config.property.MoneyProperty;
+//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.core.Ordered;
 //import org.springframework.core.annotation.Order;
 //import org.springframework.stereotype.Component;
 //
 //import javax.servlet.*;
-//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletRequest;lo
 //import javax.servlet.http.HttpServletResponse;
 //import java.io.IOException;
 //
@@ -14,7 +16,10 @@
 //@Order(Ordered.HIGHEST_PRECEDENCE)
 //public class CorsFilter implements Filter {
 //
-//    private String origemPermitida = "http://localhost:8000";
+//    @Autowired
+//    private MoneyProperty property;
+//
+//    private String origemPermitida = property.getOrigem().getEndereco();
 //
 //    @Override
 //    public void init(FilterConfig filterConfig) throws ServletException {
