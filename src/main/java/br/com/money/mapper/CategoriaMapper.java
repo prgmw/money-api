@@ -7,8 +7,8 @@ import br.com.money.model.Categoria;
 
 @Mapper(componentModel="spring")
 public interface CategoriaMapper {
-	
+
 	Categoria categoriaDTOToCategoria(CategoriaDTO categoriaDto);
 	CategoriaDTO categoriaToCategoriaDTO(Categoria categoria);
-	
+
 }

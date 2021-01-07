@@ -7,8 +7,8 @@ import br.com.money.model.Lancamento;
 
 @Mapper(componentModel="spring")
 public interface LancamentoMapper {
-	
+
 	Lancamento lancamentoDTOToLancamento(LancamentoDTO lancamentoDto);
 	LancamentoDTO lancamentoToLancamentoDTO(Lancamento lancamento);
-	
+
 }

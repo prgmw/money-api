@@ -4,6 +4,9 @@ import java.util.List;
 
 import br.com.money.model.Pessoa;
 import br.com.money.model.SimNao;
+import br.com.money.repository.filter.PessoaFilter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IPessoaService {
 
@@ -18,4 +21,6 @@ public interface IPessoaService {
 	Pessoa obterPorId(Long id);
 
 	void atualizarStatus(SimNao ativo, Long codigo);
+
+	Page<Pessoa> pesquisar(PessoaFilter filter, Pageable pageable);
 }
